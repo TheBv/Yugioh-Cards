@@ -8,20 +8,20 @@ Original images are gathered from ygoprodeck.com and upscaled with various metho
 Navigate to your Edo-Pro install folder and open the file `ProjectIgnis\config\config.json`
 in the config you want to add/replace the following
 ```json
-	"urls": [
-		{
-			"url": "https://raw.githubusercontent.com/thebv/yugioh-cards/esrgan-2x/{}.jpg",
-			"type": "pic"
-		},
-		{
-			"url": "default",
-			"type": "field"
-		},
-		{
-			"url": "default",
-			"type": "cover"
-		}
-	],
+"urls": [
+	{
+		"url": "https://raw.githubusercontent.com/thebv/yugioh-cards/esrgan-2x/{}.jpg",
+		"type": "pic"
+	},
+	{
+		"url": "default",
+		"type": "field"
+	},
+	{
+		"url": "default",
+		"type": "cover"
+	}
+],
 ```
 
 # Requirements
