@@ -10,7 +10,15 @@ in the config you want to add/replace the following
 ```json
 "urls": [
 	{
-		"url": "https://raw.githubusercontent.com/thebv/yugioh-cards/esrgan-2x/{}.jpg",
+		"url": "https://raw.githubusercontent.com/TheBv/Yugioh-Cards/master/esrgan-2x/{}.jpg",
+		"type": "pic"
+	},
+	{
+		"url": "https://images.ygoprodeck.com/images/cards/{}.jpg",
+		"type": "pic"
+	},
+	{
+		"url": "default",
 		"type": "pic"
 	},
 	{
@@ -23,6 +31,7 @@ in the config you want to add/replace the following
 	}
 ],
 ```
+This will try to download the upscaled card(s) first, then if that fails try to download them from ygoprodeck and finally trying the default, low res images.
 
 # Requirements
 This project uses bun and was run on WSL.
