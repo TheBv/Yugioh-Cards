@@ -21,17 +21,12 @@ in the config you want to add/replace the following
 		"url": "default",
 		"type": "pic"
 	},
-	{
-		"url": "default",
-		"type": "field"
-	},
-	{
-		"url": "default",
-		"type": "cover"
-	}
+	...
 ],
 ```
 This will try to download the upscaled card(s) first, then if that fails try to download them from ygoprodeck and finally trying the default, low res images.
+
+The same can also be done for fields. Take a look at the `config-example.json` file for a complete list.
 
 # Requirements
 This project uses bun and was run on WSL.
