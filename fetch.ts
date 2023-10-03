@@ -13,6 +13,9 @@ interface ResponseData {
     desc: string,
     race: string,
     archetype: string,
+    card_images: {
+        id: number
+    }[]
 }
 
 interface Response {
@@ -33,27 +36,30 @@ let counter = 0
 
 // Fetch cards
 for (const entry of data) {
-    const downloadPath = `${DOWNLOAD_DIR}/${entry.id}.jpg`
-    const file = Bun.file(downloadPath)
-    // Let's not download the images we already have downloaded
-    if (!(await file.exists())) {
-        queue.push(fetchArt(`${IMAGE_URL}/${entry.id}.jpg`, downloadPath))
+    for (const image of entry.card_images) {
+        const downloadPath = `${DOWNLOAD_DIR}/${image.id}.jpg`
+        const file = Bun.file(downloadPath)
+        // Let's not download the images we already have downloaded
+        if (!(await file.exists())) {
+            queue.push(fetchArt(`${IMAGE_URL}/${image.id}.jpg`, downloadPath))
+        }
+        if (queue.length >= BATCH_SIZE) {
+            await Promise.allSettled(queue)
+            // Probably log some stuff here
+            queue = []
+            // Wait for one second
+            await Bun.sleep(1000)
+        }
     }
-    if (queue.length >= BATCH_SIZE) {
-        await Promise.allSettled(queue)
-        // Probably log some stuff here
-        queue = []
-        // Wait for one second
-        await Bun.sleep(1000)
-    }
-
     counter++
     if (counter % 200 == 0)
         console.log("Progress:", ((counter / data.length) * 100).toFixed(4), "%")
 }
+queue = []
+counter = 0
 
 // Fetch fields
-counter = 0
+
 
 const params = new URLSearchParams()
 params.set("type", "Spell Card")
@@ -63,24 +69,28 @@ const fieldJson = await fieldResponse.json() as Response
 const fieldData = fieldJson.data
 
 for (const entry of fieldData) {
-    const downloadPath = `${DOWNLOAD_DIR_FIELD}/${entry.id}.jpg`
-    const file = Bun.file(downloadPath)
-    // Let's not download the images we already have downloaded
-    if (!(await file.exists())) {
-        queue.push(fetchArt(`${IMAGE_URL_FIELD}/${entry.id}.jpg`, downloadPath))
+    for (const image of entry.card_images) {
+        const downloadPath = `${DOWNLOAD_DIR_FIELD}/${image.id}.jpg`
+        const file = Bun.file(downloadPath)
+        // Let's not download the images we already have downloaded
+        if (!(await file.exists())) {
+            queue.push(fetchArt(`${IMAGE_URL_FIELD}/${image.id}.jpg`, downloadPath))
+        }
+        if (queue.length >= BATCH_SIZE) {
+            await Promise.allSettled(queue)
+            // Probably log some stuff here
+            queue = []
+            // Wait for one second
+            await Bun.sleep(1000)
+        }
     }
-    if (queue.length >= BATCH_SIZE) {
-        await Promise.allSettled(queue)
-        // Probably log some stuff here
-        queue = []
-        // Wait for one second
-        await Bun.sleep(1000)
-    }
-
     counter++
     if (counter % 200 == 0)
         console.log("Progress:", ((counter / data.length) * 100).toFixed(4), "%")
 }
+
+await Promise.allSettled(queue)
+queue = []
 
 async function fetchArt(url: string, downloadPath: string) {
     try {
